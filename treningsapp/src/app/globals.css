@@ -1,0 +1,72 @@
+@import "https://fonts.googleapis.com/css?family=Open+Sans";
+/* https://coolors.co/0d000f-fdffff-642ca9-ee6352-3fa7d6 */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: "Open Sans", sans-serif;
+  font-size: 17px;
+}
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(253, 255, 255);
+  background-color: var(--sec-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  --content-with: 1700px;
+  --content-max-with: calc(100% - calc(var(--spacer) * 2));
+  --primary-color: rgb(100, 44, 169);
+  --sec-color: rgb(13, 0, 15);
+  --ter-color: rgb(63, 167, 214);
+  --qua-color: rgb(238, 99, 82);
+  --spacer: 15px;
+}
+
+h1 {
+  font-size: 3.24rem;
+}
+
+h2 {
+  font-size: 1.62rem;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+a {
+  all: unset;
+}
+
+main {
+  width: var(--content-max-with);
+  padding: var(--spacer);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  width: calc(100% - calc(var(--spacer) * 2));
+  background-color: var(--primary-color);
+  padding: var(--spacer);
+  border-radius: var(--spacer);
+  margin-bottom: var(--spacer);
+}
+
+@media (max-width: 365px) {
+  html {
+    font-size: 12px;
+  }
+}
