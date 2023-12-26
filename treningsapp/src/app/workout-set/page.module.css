@@ -4,3 +4,17 @@
   justify-content: space-between;
   margin-bottom: var(--spacer);
 }
+
+.flexer:last-child {
+  margin-bottom: 0;
+}
+
+.numbers {
+  min-width: 42px;
+  text-align: center;
+}
+
+.spacer {
+  width: var(--spacer);
+  height: var(--spacer);
+}

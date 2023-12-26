@@ -1,0 +1,29 @@
+.flexer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.down-rotater {
+  transform: rotate(90deg);
+  transition: transform 0.4s;
+}
+
+.down-rotater button {
+  margin: 0 !important;
+}
+
+.up-rotater {
+  transform: rotate(270deg);
+}
+
+.video-wrapper {
+  transition: height 0.4s;
+  width: 100%;
+  height: 0px;
+  overflow: hidden;
+}
+
+.show {
+  height: calc(calc(100vw - calc(var(--spacer) * 4)) / (16 / 9));
+}

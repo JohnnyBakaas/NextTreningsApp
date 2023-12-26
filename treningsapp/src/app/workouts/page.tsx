@@ -8,11 +8,15 @@ export default function Workouts() {
     },
     {
       name: "Pull",
-      date: new Date(new Date(1)),
+      date: new Date(new Date(2000000000000)),
     },
   ];
   return (
     <main className={styles.main}>
+      <div className={["card", styles.workout].join(" ")}>
+        <h1>Uke</h1>
+        <h1>1 / 5</h1>
+      </div>
       {workoutList.map((e, i) => (
         <Workout key={i} name={e.name} date={e.date} />
       ))}
