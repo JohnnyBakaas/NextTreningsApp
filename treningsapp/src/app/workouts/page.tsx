@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Workouts() {
@@ -24,7 +25,7 @@ export default function Workouts() {
   );
 }
 
-type WorkoutProps = {
+export type WorkoutProps = {
   name: string;
   date: Date;
 };
@@ -43,7 +44,10 @@ const Workout = ({ name, date }: WorkoutProps) => {
   });
 
   return (
-    <div className={[styles.workout, "card"].join(" ")}>
+    <Link
+      href={"workouts/overview"}
+      className={[styles.workout, "card"].join(" ")}
+    >
       <div>
         <h1>{name}</h1>
         <p>{norwegianDate}</p>
@@ -57,6 +61,6 @@ const Workout = ({ name, date }: WorkoutProps) => {
           <h2>Åpne</h2>
         </button>
       )}
-    </div>
+    </Link>
   );
 };
