@@ -1,0 +1,19 @@
+.overview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - calc(var(--spacer) * 2));
+  padding: var(--spacer);
+  border-radius: var(--spacer);
+  margin-bottom: var(--spacer);
+}
+
+.nav {
+  position: fixed;
+  bottom: var(--spacer);
+  width: calc(100% - calc(var(--spacer) * 4));
+  padding: var(--spacer);
+  display: flex;
+  justify-content: space-between;
+  background-color: red;
+}

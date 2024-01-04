@@ -45,7 +45,7 @@ const Workout = ({ name, date }: WorkoutProps) => {
 
   return (
     <Link
-      href={"workouts/overview"}
+      href={"workouts/overview/0000-0000-0000-0000"}
       className={[styles.workout, "card"].join(" ")}
     >
       <div>

@@ -1,0 +1,64 @@
+@import "https://fonts.googleapis.com/css?family=Open+Sans";
+
+html {
+  font-family: "Open Sans", sans-serif;
+  font-size: 17px;
+}
+
+:root {
+  --bc: rgb(13, 0, 15);
+  --bc-soft: rgb(100, 44, 169);
+  --text: white;
+  --text-soft: rgba(200, 200, 200, 0.8);
+  --next: rgb(63, 167, 214);
+  --red: rgb(238, 99, 82);
+
+  --gap: 20px;
+  --hundo-gap: calc(100% - calc(var(--gap) * 2));
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bc);
+  color: var(--text);
+
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.24rem;
+}
+
+h2 {
+  font-size: 1.62rem;
+  font-weight: 100;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
+}
+
+main {
+  max-width: 430px;
+  width: 100%;
+  padding: var(--gap);
+}
+
+.cta {
+  width: var(--hundo-gap);
+  padding: var(--gap);
+  border-radius: var(--gap);
+  background-color: var(--bc-soft);
+  text-align: center;
+}

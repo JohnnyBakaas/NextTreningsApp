@@ -2,13 +2,16 @@ import StartButton from "@/components/startButton/StartButton";
 import styles from "./page.module.css";
 import SmallRoundButton from "@/components/smallRoundButton/SmallRoundButton";
 import DropDownVideo from "@/components/dropDownVideo/DropDownVideo";
+import { getSet } from "@/api/workouts/set";
 
-export default function WorkoutSet() {
+export default function WorkoutSet({ params }: { params: { SetId: string } }) {
+  const data = getSet(params.SetId);
+  if (!data) return <h1>Nei!</h1>;
   return (
     <main className={styles.main}>
       <div className="card">
         <div className={styles.flexer}>
-          <h1>Benk</h1>
+          <h1> {data.exercise} </h1>
           <h2 style={{ textAlign: "right" }}>Set 1/3</h2>
         </div>
         <DropDownVideo />
