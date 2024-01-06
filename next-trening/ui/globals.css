@@ -7,14 +7,24 @@ html {
 
 :root {
   --bc: rgb(13, 0, 15);
+  --bc-gra: rgb(33 0 38);
   --bc-soft: rgb(100, 44, 169);
   --text: white;
   --text-soft: rgba(200, 200, 200, 0.8);
   --next: rgb(63, 167, 214);
   --red: rgb(238, 99, 82);
 
+  --pending-bc: rgb(167, 167, 167);
+
   --gap: 20px;
+  --gap-s: 10px;
   --hundo-gap: calc(100% - calc(var(--gap) * 2));
+  --hundo-gap-s: calc(100% - calc(var(--gap-s) * 2));
+
+  --h1-fz: 3.24rem;
+  --h2-fz: 1.62rem;
+  --h2-fw: 100;
+  --h3-fz: 1rem;
 }
 
 * {
@@ -32,16 +42,16 @@ body {
 }
 
 h1 {
-  font-size: 3.24rem;
+  font-size: var(--h1-fz);
 }
 
 h2 {
-  font-size: 1.62rem;
-  font-weight: 100;
+  font-size: var(--h2-fz);
+  font-weight: var(--h2-fw);
 }
 
 h3 {
-  font-size: 1rem;
+  font-size: var(--h3-fz);
 }
 
 a {

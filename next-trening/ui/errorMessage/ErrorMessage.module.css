@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  width: var(--hundo-gap-s);
+  gap: var(--gap);
+  padding: var(--gap-s);
+  background-color: red;
+  border-radius: var(--gap-s);
+}
+
+.wrapper svg {
+  height: 23px;
+  width: 23px;
+}

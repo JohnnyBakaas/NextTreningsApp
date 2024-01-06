@@ -1,0 +1,97 @@
+.form {
+  background-color: var(--bc-soft);
+  padding: var(--gap);
+  border-radius: var(--gap);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+
+.form label {
+  font-size: var(--h2-fz);
+  font-weight: var(--h2-fw);
+}
+
+.form input {
+  all: unset;
+  font-size: var(--h2-fz);
+  font-weight: var(--h2-fw);
+  padding: var(--gap);
+  width: var(--hundo-gap);
+  background-color: var(--text);
+  color: var(--bc);
+  border-radius: var(--gap-s);
+}
+
+.form input[disabled] {
+  background-color: var(--pending-bc);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper input {
+  margin-top: var(--gap-s);
+}
+
+.password-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.password-wrapper button {
+  all: unset;
+  height: var(--h2-fz);
+  width: fit-content;
+}
+
+.password-wrapper button svg {
+  width: 100%;
+  height: 100%;
+}
+
+.button {
+  all: unset;
+  background-color: var(--next);
+  color: var(--text);
+  font-size: var(--h1-fz);
+  text-align: center;
+  width: var(--hundo-gap);
+  padding: var(--gap);
+  border-radius: var(--gap-s);
+  margin-top: var(--gap-s);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button svg {
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.new {
+  background-color: unset;
+}
+
+.new-button {
+  margin-top: 0;
+}
+
+.new-title {
+  text-align: center;
+}

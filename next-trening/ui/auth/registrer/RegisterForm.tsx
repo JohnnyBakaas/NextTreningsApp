@@ -1,17 +1,18 @@
 "use client";
 
-import styles from "./LoggInnFrom.module.css";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState, useTransition } from "react";
+import styles from "./RegisterForm.module.css";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { ErrorMessage } from "@/ui/errorMessage/ErrorMessage";
+import { CgSpinnerTwoAlt } from "react-icons/cg";
 import Link from "next/link";
 import { cc } from "@/utils/classes";
-import { login } from "@/actions/login";
-import { ErrorMessage } from "@/ui/errorMessage/ErrorMessage";
+import { registrer } from "@/actions/registrer";
 
-export default function LoggInnForm() {
+export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -21,7 +22,11 @@ export default function LoggInnForm() {
     e.preventDefault();
     setError(undefined);
     startTransition(() => {
-      login({ email: email, password: password }).then(
+      registrer({
+        email: email,
+        password: password,
+        passwordCheck: passwordCheck,
+      }).then(
         (
           data:
             | { error: string; success?: undefined }
@@ -54,6 +59,7 @@ export default function LoggInnForm() {
             value={email}
           />
         </div>
+
         <div className={styles["input-wrapper"]}>
           <div className={styles["password-wrapper"]}>
             <label htmlFor="password">Passord</label>
@@ -78,23 +84,43 @@ export default function LoggInnForm() {
           />
         </div>
 
+        <div className={styles["input-wrapper"]}>
+          <div className={styles["password-wrapper"]}>
+            <label htmlFor="password">Gjennta passord</label>
+            <button
+              type="button"
+              onClick={() => setShowPassword((pre) => !pre)}
+            >
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+            </button>
+          </div>
+
+          <input
+            id="password"
+            name="password"
+            autoComplete="password"
+            type={showPassword ? "text" : "password"}
+            disabled={isPending}
+            onChange={(e) => {
+              setPasswordCheck(e.target.value);
+            }}
+            value={passwordCheck}
+          />
+        </div>
+
         {error && <ErrorMessage message={error} />}
 
         <button type="submit" className={styles["button"]}>
-          {isPending ? (
-            <CgSpinnerTwoAlt />
-          ) : (
-            <Link href={"/hjem"}>Logg inn!</Link>
-          )}
+          {isPending ? <CgSpinnerTwoAlt /> : <Link href={""}>Registrer!</Link>}
         </button>
       </form>
 
       <div className={cc([styles.form, styles.new])}>
         <Link
-          href={"/registrer"}
+          href={"/logg-inn"}
           className={cc([styles["button"], styles["new-button"]])}
         >
-          Registrer!
+          Logg inn!
         </Link>
       </div>
     </>
