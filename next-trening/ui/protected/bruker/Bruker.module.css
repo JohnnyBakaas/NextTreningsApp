@@ -1,0 +1,42 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.todays-workout-wrapper {
+  background-color: var(--bc-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--gap);
+  padding: var(--gap);
+  gap: var(--gap);
+}
+
+.button {
+  all: unset;
+  background-color: var(--next);
+  color: var(--text);
+  font-size: var(--h1-fz);
+  text-align: center;
+  width: var(--hundo-gap);
+  padding: var(--gap);
+  border-radius: var(--gap-s);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.others-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  width: 100%;
+  align-items: center;
+}
+
+.others-wrapper .button {
+  width: calc(var(--hundo-gap) - 2 * var(--gap));
+}

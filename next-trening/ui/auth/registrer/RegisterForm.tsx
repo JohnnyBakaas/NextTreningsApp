@@ -86,7 +86,7 @@ export default function RegisterForm() {
 
         <div className={styles["input-wrapper"]}>
           <div className={styles["password-wrapper"]}>
-            <label htmlFor="password">Gjennta passord</label>
+            <label htmlFor="passwordCheck">Gjennta passord</label>
             <button
               type="button"
               onClick={() => setShowPassword((pre) => !pre)}
@@ -96,7 +96,7 @@ export default function RegisterForm() {
           </div>
 
           <input
-            id="password"
+            id="passwordCheck"
             name="password"
             autoComplete="password"
             type={showPassword ? "text" : "password"}

@@ -1,0 +1,20 @@
+.sosials {
+  width: 100%;
+  display: flex;
+  gap: var(--gap-s);
+}
+
+.button {
+  all: unset;
+  width: 100%;
+  background-color: var(--next);
+  border-radius: var(--gap-s);
+  text-align: center;
+  padding: var(--gap);
+  height: var(--h1-fz);
+}
+
+.button svg {
+  width: var(--h1-fz);
+  height: var(--h1-fz);
+}

@@ -88,7 +88,11 @@
   background-color: unset;
 }
 
-.new-button {
+.new:not(:first-child) {
+  margin-top: 0;
+}
+
+.new .new-button {
   margin-top: 0;
 }
 

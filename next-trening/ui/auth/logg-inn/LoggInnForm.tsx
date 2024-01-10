@@ -6,8 +6,9 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { cc } from "@/utils/classes";
-import { login } from "@/actions/login";
+import login from "@/actions/login";
 import { ErrorMessage } from "@/ui/errorMessage/ErrorMessage";
+import Sosials from "../sosials/Sosials";
 
 export default function LoggInnForm() {
   const [email, setEmail] = useState("");
@@ -21,18 +22,14 @@ export default function LoggInnForm() {
     e.preventDefault();
     setError(undefined);
     startTransition(() => {
-      login({ email: email, password: password }).then(
-        (
-          data:
-            | { error: string; success?: undefined }
-            | { success: boolean; error?: undefined }
-        ) => {
-          console.log(data);
-          if (data.error) {
-            setError(data.error);
-          }
+      login({ email: email, password: password }).then((data) => {
+        console.log(data);
+        if (!data) {
+          setError("Noe gikk galt");
+        } else if (data.error) {
+          setError(data.error);
         }
-      );
+      });
     });
   };
 
@@ -81,21 +78,23 @@ export default function LoggInnForm() {
         {error && <ErrorMessage message={error} />}
 
         <button type="submit" className={styles["button"]}>
-          {isPending ? (
-            <CgSpinnerTwoAlt />
-          ) : (
-            <Link href={"/hjem"}>Logg inn!</Link>
-          )}
+          {isPending ? <CgSpinnerTwoAlt /> : "Logg inn!"}
         </button>
       </form>
 
-      <div className={cc([styles.form, styles.new])}>
-        <Link
-          href={"/registrer"}
-          className={cc([styles["button"], styles["new-button"]])}
-        >
-          Registrer!
-        </Link>
+      <div>
+        <div className={cc([styles.form, styles.new])}>
+          <Sosials />
+        </div>
+
+        <div className={cc([styles.form, styles.new])}>
+          <Link
+            href={"/registrer"}
+            className={cc([styles["button"], styles["new-button"]])}
+          >
+            Registrer!
+          </Link>
+        </div>
       </div>
     </>
   );

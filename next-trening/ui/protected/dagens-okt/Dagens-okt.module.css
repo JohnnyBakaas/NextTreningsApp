@@ -1,0 +1,33 @@
+.nav {
+  position: fixed;
+  bottom: var(--gap);
+  width: var(--hundo-gap);
+  max-width: 430px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  background-color: var(--bc-soft);
+  height: var(--h1-fz);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--gap-s);
+  padding: var(--gap-s);
+}
+
+.back {
+  background-color: var(--red);
+  color: var(--text);
+}
+
+.next {
+  background-color: var(--next);
+  color: var(--text);
+}
+
+.spacer {
+  height: 300px;
+}

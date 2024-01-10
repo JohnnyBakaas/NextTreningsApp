@@ -2,8 +2,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  z-index: -2;
+
   background-color: var(--bc-gra);
+}
+
+.main * {
+  z-index: 1;
 }
 
 .cta-wrapper {
@@ -22,7 +26,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  z-index: -1;
+  z-index: 1;
   background: linear-gradient(to bottom, transparent, rgb(0, 0, 0)),
     url("https://pngimg.com/uploads/bodybuilding/bodybuilding_PNG18.png");
   background-repeat: no-repeat, no-repeat;

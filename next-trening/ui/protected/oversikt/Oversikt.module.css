@@ -1,0 +1,27 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--gap);
+}
+
+.curent-meeso {
+  width: var(--hundo-gap);
+  background-color: var(--bc-soft);
+  padding: var(--gap);
+  border-radius: var(--gap);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--gap);
+}
+
+.new-meso {
+  all: unset;
+  width: var(--hundo-gap);
+  background-color: var(--next);
+  padding: var(--gap);
+  border-radius: var(--gap);
+  text-align: center;
+}

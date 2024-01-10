@@ -1,0 +1,59 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--gap);
+}
+
+.week-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--gap);
+  background-color: var(--bc-soft);
+  border-radius: var(--gap);
+  align-items: center;
+}
+
+.days-input {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.days-input button {
+  all: unset;
+}
+.days-input button svg {
+  height: var(--h2-fz);
+  width: var(--h2-fz);
+}
+
+.split-wraper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--gap);
+  background-color: var(--bc-soft);
+  border-radius: var(--gap);
+}
+
+.split-wraper button {
+  all: unset;
+  width: var(--hundo-gap);
+  text-align: center;
+  padding: var(--gap-s);
+  border-radius: var(--gap);
+  background-color: var(--next);
+  font-weight: bold;
+  font-size: var(--h2-fz);
+  border: var(--gap-s) solid var(--next);
+}
+
+.split-wraper button.selected {
+  border-color: var(--text);
+}
+
+.disabled-arrow svg {
+  color: var(--red);
+}
