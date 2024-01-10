@@ -131,6 +131,23 @@ const planleggMeso = () => {
     setMesoSession(meso.sessions.length - 1);
   };
 
+  const removeExercise = (index: number) => {
+    console.log(index);
+    const filterd = meso.sessions[mesoSession].exercises.filter(
+      (e) => e !== meso.sessions[mesoSession].exercises[index]
+    );
+    meso.sessions[mesoSession].exercises = filterd;
+    console.log(filterd);
+    setMeso((pre) => {
+      const updatedSessions = [...pre.sessions];
+      updatedSessions[mesoSession] = {
+        ...updatedSessions[mesoSession],
+        exercises: filterd,
+      };
+      return { ...pre, sessions: updatedSessions };
+    });
+  };
+
   return (
     <main>
       <h1>Planlegg Meso</h1>
@@ -138,7 +155,13 @@ const planleggMeso = () => {
         <h2>
           Økt: {mesoSession + 1}/{data.sessions.length} - {day(session.day)}
         </h2>
-        inp
+        <select name="" id="">
+          {meso.sessions.map((session, i) => (
+            <option key={session.name + i} value={session.name}>
+              {session.name}
+            </option>
+          ))}
+        </select>
         <div>
           <div>
             <input
@@ -152,10 +175,13 @@ const planleggMeso = () => {
           <div>
             {session.exercises.map((exercise, i) => (
               <Exercise
+                removeExercise={removeExercise}
+                mesoSession={mesoSession}
                 key={exercise.name + i}
                 exercise={exercise}
                 setMeso={setMeso}
                 meso={meso}
+                index={i}
               />
             ))}
           </div>
@@ -206,12 +232,22 @@ const planleggMeso = () => {
 export default planleggMeso;
 
 type ExerciseProps = {
+  removeExercise: (index: number) => void;
   exercise: Exercise;
   setMeso: (pre: Meso) => void;
   meso: Meso;
+  mesoSession: number;
+  index: number;
 };
 
-const Exercise = ({ exercise, setMeso, meso }: ExerciseProps) => {
+const Exercise = ({
+  exercise,
+  setMeso,
+  meso,
+  mesoSession,
+  removeExercise,
+  index,
+}: ExerciseProps) => {
   const [exerciseSets, setExerciseSets] = useState(exercise.sets);
   const [exerciseName, setExerciseName] = useState(exercise.name);
 
@@ -233,12 +269,6 @@ const Exercise = ({ exercise, setMeso, meso }: ExerciseProps) => {
     handleMesoChange();
   };
 
-  const removeExercise = () => {
-    const index = meso.sessions[0].exercises.indexOf(exercise);
-    meso.sessions[0].exercises.splice(index, 1);
-    handleMesoChange();
-  };
-
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExerciseName(e.target.value);
     exercise.name = e.target.value;
@@ -246,7 +276,7 @@ const Exercise = ({ exercise, setMeso, meso }: ExerciseProps) => {
 
   return (
     <div className={styles["exercise-wrapper"]}>
-      <button onClick={() => removeExercise()}> X</button>
+      <button onClick={() => removeExercise(index)}> X</button>
 
       <input
         type="text"
