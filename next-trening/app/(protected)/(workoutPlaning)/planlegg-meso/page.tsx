@@ -4,22 +4,12 @@ import styles from "@/ui/protected/workoutPlaning/planleggMeso/PlanleggMeso.modu
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-/**
- * User {
- * name: string;
- * email: string;
- * password: string;
- * CurentMeso: MesoData;
- * PriviousMeso: MesoData[];
- * }
- */
-
-type Meso = {
+export type Meso = {
   name: string;
   sessions: MesoSessionData[];
 };
 
-type MesoSessionData = {
+export type MesoSessionData = {
   name: string; // Push, Pull, Legs, Full Body, Upper, Lower, Custom
   exercises: Exercise[];
   day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -27,13 +17,13 @@ type MesoSessionData = {
   completed: boolean;
 };
 
-type Exercise = {
+export type Exercise = {
   name: string;
   sets: number;
   completed: boolean;
 };
 
-type Set = {
+export type Set = {
   reps: number;
   weight: number;
   rir: number;
@@ -79,9 +69,8 @@ const data: Meso = {
 
 const planleggMeso = () => {
   const [meso, setMeso] = useState<Meso>(data);
+  console.log(meso);
   const [mesoSession, setMesoSession] = useState(0);
-
-  const session = meso.sessions[mesoSession];
 
   const addNewExercise = () => {
     const newExercise: Exercise = {
@@ -117,12 +106,14 @@ const planleggMeso = () => {
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    session.name = e.target.value;
+    meso.sessions[mesoSession].name = e.target.value;
     setMeso({ ...meso });
   };
 
   const copySession = () => {
-    const newSession: MesoSessionData = JSON.parse(JSON.stringify(session));
+    const newSession: MesoSessionData = JSON.parse(
+      JSON.stringify(meso.sessions[mesoSession])
+    );
 
     meso.sessions.push(newSession);
 
@@ -132,19 +123,15 @@ const planleggMeso = () => {
   };
 
   const removeExercise = (index: number) => {
-    console.log(index);
-    const filterd = meso.sessions[mesoSession].exercises.filter(
-      (e) => e !== meso.sessions[mesoSession].exercises[index]
-    );
-    meso.sessions[mesoSession].exercises = filterd;
-    console.log(filterd);
-    setMeso((pre) => {
-      const updatedSessions = [...pre.sessions];
-      updatedSessions[mesoSession] = {
-        ...updatedSessions[mesoSession],
-        exercises: filterd,
-      };
-      return { ...pre, sessions: updatedSessions };
+    setMeso((prevMeso) => {
+      const newMeso = { ...prevMeso };
+      const newSessions = [...newMeso.sessions];
+      const newSession = { ...newSessions[mesoSession] };
+      newSession.exercises = newSession.exercises.filter(
+        (_, idx) => idx !== index
+      );
+      newSessions[mesoSession] = newSession;
+      return { ...newMeso, sessions: newSessions };
     });
   };
 
@@ -153,12 +140,16 @@ const planleggMeso = () => {
       <h1>Planlegg Meso</h1>
       <div>
         <h2>
-          Økt: {mesoSession + 1}/{data.sessions.length} - {day(session.day)}
+          Økt: {mesoSession + 1}/{data.sessions.length} -{" "}
+          {day(meso.sessions[mesoSession].day)}
         </h2>
         <select name="" id="">
           {meso.sessions.map((session, i) => (
-            <option key={session.name + i} value={session.name}>
-              {session.name}
+            <option
+              key={meso.sessions[mesoSession].name + i}
+              value={meso.sessions[mesoSession].name}
+            >
+              {meso.sessions[mesoSession].name}
             </option>
           ))}
         </select>
@@ -167,17 +158,17 @@ const planleggMeso = () => {
             <input
               type="text"
               onChange={handleNameChange}
-              value={session.name}
+              value={meso.sessions[mesoSession].name}
               className={styles["input-h1"]}
             />
             <h1>X</h1>
           </div>
           <div>
-            {session.exercises.map((exercise, i) => (
+            {meso.sessions[mesoSession].exercises.map((exercise, i) => (
               <Exercise
                 removeExercise={removeExercise}
                 mesoSession={mesoSession}
-                key={exercise.name + i}
+                key={`${exercise.name + " " + i}`}
                 exercise={exercise}
                 setMeso={setMeso}
                 meso={meso}
