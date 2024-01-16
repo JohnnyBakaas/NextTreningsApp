@@ -1,7 +1,8 @@
 "use client";
 
 import styles from "@/ui/protected/workoutPlaning/planleggMeso/PlanleggMeso.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+// @ts-ignore
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export type Meso = {
@@ -69,21 +70,41 @@ const data: Meso = {
 
 const planleggMeso = () => {
   const [meso, setMeso] = useState<Meso>(data);
-  console.log(meso);
   const [mesoSession, setMesoSession] = useState(0);
 
   const addNewExercise = () => {
-    const newExercise: Exercise = {
-      name: "New Exercise",
-      sets: 2,
-      completed: false,
-    };
+    setMeso((prevMeso) => {
+      // Create a deep copy of the current meso state to avoid direct mutation
+      const newMeso = { ...prevMeso };
+      const newSessions = [...newMeso.sessions];
+      const currentSession = { ...newSessions[mesoSession] };
+      const newExercises = [...currentSession.exercises];
 
-    meso.sessions[mesoSession].exercises.push(newExercise);
-    setMeso({ ...meso });
+      // Create a new exercise object
+      const newExercise: Exercise = {
+        name: "New Exercise",
+        sets: 2,
+        completed: false,
+      };
+
+      // Add the new exercise to the copied exercises array
+      newExercises.push(newExercise);
+
+      // Update the current session with the new exercises array
+      currentSession.exercises = newExercises;
+
+      // Update the sessions array with the updated session
+      newSessions[mesoSession] = currentSession;
+
+      // Return the new meso state with the updated sessions array
+      return { ...newMeso, sessions: newSessions };
+    });
   };
 
+  // q: why dose this trigrer twice when the onClick onyl trigers once?
+
   const addNewSession = () => {
+    const newIndex = meso.sessions.length;
     const newSession: MesoSessionData = {
       name: "Ny økt",
       exercises: [
@@ -98,40 +119,54 @@ const planleggMeso = () => {
       completed: false,
     };
 
-    meso.sessions.push(newSession);
+    setMeso((pre) => {
+      return { ...pre, sessions: [...pre.sessions, newSession] };
+    });
 
-    setMeso({ ...meso });
-    console.log(meso.sessions);
-    setMesoSession(meso.sessions.length - 1);
+    setMesoSession(newIndex);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    meso.sessions[mesoSession].name = e.target.value;
-    setMeso({ ...meso });
+    setMeso((prevMeso) => {
+      const newSessions = prevMeso.sessions.map((session, idx) =>
+        idx === mesoSession ? { ...session, name: e.target.value } : session
+      );
+      return { ...prevMeso, sessions: newSessions };
+    });
   };
 
   const copySession = () => {
+    const newIndex = meso.sessions.length;
     const newSession: MesoSessionData = JSON.parse(
       JSON.stringify(meso.sessions[mesoSession])
     );
 
-    meso.sessions.push(newSession);
+    setMeso((pre) => {
+      return { ...pre, sessions: [...pre.sessions, newSession] };
+    });
 
-    setMeso({ ...meso });
     console.log(meso.sessions);
-    setMesoSession(meso.sessions.length - 1);
+    setMesoSession(newIndex);
   };
 
   const removeExercise = (index: number) => {
     setMeso((prevMeso) => {
+      console.log("Previous meso state:", prevMeso);
+
       const newMeso = { ...prevMeso };
-      const newSessions = [...newMeso.sessions];
-      const newSession = { ...newSessions[mesoSession] };
-      newSession.exercises = newSession.exercises.filter(
-        (_, idx) => idx !== index
-      );
-      newSessions[mesoSession] = newSession;
-      return { ...newMeso, sessions: newSessions };
+      const newSessions = newMeso.sessions.map((session, sessionIndex) => {
+        if (sessionIndex === mesoSession) {
+          return {
+            ...session,
+            exercises: session.exercises.filter((_, idx) => idx !== index),
+          };
+        }
+        return session;
+      });
+
+      const updatedMeso = { ...newMeso, sessions: newSessions };
+      console.log("Updated meso state:", updatedMeso);
+      return updatedMeso;
     });
   };
 
@@ -140,7 +175,7 @@ const planleggMeso = () => {
       <h1>Planlegg Meso</h1>
       <div>
         <h2>
-          Økt: {mesoSession + 1}/{data.sessions.length} -{" "}
+          Økt: {mesoSession + 1}/{meso.sessions.length} -{" "}
           {day(meso.sessions[mesoSession].day)}
         </h2>
         <select name="" id="">
@@ -164,22 +199,22 @@ const planleggMeso = () => {
             <h1>X</h1>
           </div>
           <div>
-            {meso.sessions[mesoSession].exercises.map((exercise, i) => (
+            {meso.sessions[mesoSession].exercises.map((exercise, index) => (
               <Exercise
+                key={`${exercise.name}-${index}`}
                 removeExercise={removeExercise}
                 mesoSession={mesoSession}
-                key={`${exercise.name + " " + i}`}
                 exercise={exercise}
                 setMeso={setMeso}
                 meso={meso}
-                index={i}
+                index={index}
               />
             ))}
           </div>
 
           <button
             className={styles["add-exercise-button"]}
-            onClick={addNewExercise}
+            onClick={() => addNewExercise()}
           >
             Legg til en ny øvelse
           </button>
@@ -239,54 +274,64 @@ const Exercise = ({
   removeExercise,
   index,
 }: ExerciseProps) => {
-  const [exerciseSets, setExerciseSets] = useState(exercise.sets);
-  const [exerciseName, setExerciseName] = useState(exercise.name);
-
-  const handleMesoChange = () => {
-    setMeso({ ...meso });
-    console.log(meso);
+  const handleSetsChange = (newSets: number) => {
+    setMeso((prevMeso: Meso) => {
+      const newSessions = prevMeso.sessions.map(
+        (session: MesoSessionData, sIdx: number) =>
+          sIdx === mesoSession
+            ? {
+                ...session,
+                exercises: session.exercises.map((ex: Exercise, eIdx: number) =>
+                  eIdx === index ? { ...ex, sets: newSets } : ex
+                ),
+              }
+            : session
+      );
+      return { ...prevMeso, sessions: newSessions };
+    });
   };
 
-  const changeSets = (direction: "up" | "down") => {
-    if (direction == "up") {
-      exercise.sets++;
-    }
-    if (direction == "down") {
-      if (exercise.sets <= 1) return;
-      exercise.sets--;
-    }
-    setExerciseSets(exercise.sets);
-
-    handleMesoChange();
-  };
-
-  const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExerciseName(e.target.value);
-    exercise.name = e.target.value;
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMeso((prevMeso: Meso) => {
+      const newName = e.target.value;
+      const newSessions = prevMeso.sessions.map(
+        (session: MesoSessionData, sIdx: number) =>
+          sIdx === mesoSession
+            ? {
+                ...session,
+                exercises: session.exercises.map((ex: Exercise, eIdx: number) =>
+                  eIdx === index ? { ...ex, name: newName } : ex
+                ),
+              }
+            : session
+      );
+      return { ...prevMeso, sessions: newSessions };
+    });
   };
 
   return (
     <div className={styles["exercise-wrapper"]}>
-      <button onClick={() => removeExercise(index)}> X</button>
+      <button onClick={() => removeExercise(index)}> X </button>
 
       <input
         type="text"
-        value={exerciseName}
-        onChange={changeName}
+        value={exercise.name}
+        onChange={handleNameChange}
         className={styles["input-h2"]}
       />
 
       <div className={styles["arrow-button-wrapper"]}>
         <button
           className={styles["arrow-button"]}
-          onClick={() => changeSets("down")}
+          onClick={() => handleSetsChange(exercise.sets - 1)}
+          disabled={exercise.sets <= 1}
         >
           <FaArrowLeft />
         </button>
-        <h2>{exerciseSets}</h2>
+        <h2>{exercise.sets}</h2>
         <button
           className={styles["arrow-button"]}
-          onClick={() => changeSets("up")}
+          onClick={() => handleSetsChange(exercise.sets + 1)}
         >
           <FaArrowRight />
         </button>
@@ -296,6 +341,14 @@ const Exercise = ({
 };
 
 const day = (dayIndex: number) => {
-  const days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
+  const days = [
+    "Søndag",
+    "Mandag",
+    "Tirsdag",
+    "Onsdag",
+    "Torsdag",
+    "Fredag",
+    "Lørdag",
+  ];
   return days[dayIndex];
 };
