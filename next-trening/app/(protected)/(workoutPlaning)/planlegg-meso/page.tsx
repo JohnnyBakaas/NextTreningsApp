@@ -13,10 +13,12 @@ export type Meso = {
 export type MesoSessionData = {
   name: string; // Push, Pull, Legs, Full Body, Upper, Lower, Custom
   exercises: Exercise[];
-  day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  day: DayIndex;
   mesoDayNumber: number;
   completed: boolean;
 };
+
+type DayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export type Exercise = {
   name: string;
@@ -68,40 +70,42 @@ const data: Meso = {
   ],
 };
 
+const days = [
+  "Mandag",
+  "Tirsdag",
+  "Onsdag",
+  "Torsdag",
+  "Fredag",
+  "Lørdag",
+  "Søndag",
+];
+
 const planleggMeso = () => {
   const [meso, setMeso] = useState<Meso>(data);
   const [mesoSession, setMesoSession] = useState(0);
 
   const addNewExercise = () => {
     setMeso((prevMeso) => {
-      // Create a deep copy of the current meso state to avoid direct mutation
       const newMeso = { ...prevMeso };
       const newSessions = [...newMeso.sessions];
       const currentSession = { ...newSessions[mesoSession] };
       const newExercises = [...currentSession.exercises];
 
-      // Create a new exercise object
       const newExercise: Exercise = {
         name: "New Exercise",
         sets: 2,
         completed: false,
       };
 
-      // Add the new exercise to the copied exercises array
       newExercises.push(newExercise);
 
-      // Update the current session with the new exercises array
       currentSession.exercises = newExercises;
 
-      // Update the sessions array with the updated session
       newSessions[mesoSession] = currentSession;
 
-      // Return the new meso state with the updated sessions array
       return { ...newMeso, sessions: newSessions };
     });
   };
-
-  // q: why dose this trigrer twice when the onClick onyl trigers once?
 
   const addNewSession = () => {
     const newIndex = meso.sessions.length;
@@ -170,21 +174,30 @@ const planleggMeso = () => {
     });
   };
 
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const day = e.target.value;
+    setMeso((pre) => {
+      const newMeso = { ...pre };
+      newMeso.sessions[mesoSession].day = getDayIndex(day);
+      return newMeso;
+    });
+  };
+
   return (
     <main>
       <h1>Planlegg Meso</h1>
       <div>
         <h2>
           Økt: {mesoSession + 1}/{meso.sessions.length} -{" "}
-          {day(meso.sessions[mesoSession].day)}
+          {getDay(meso.sessions[mesoSession].day)}
         </h2>
-        <select name="" id="">
-          {meso.sessions.map((session, i) => (
-            <option
-              key={meso.sessions[mesoSession].name + i}
-              value={meso.sessions[mesoSession].name}
-            >
-              {meso.sessions[mesoSession].name}
+        <select
+          value={getDay(meso.sessions[mesoSession].day)}
+          onChange={handleDayChange}
+        >
+          {days.map((day, i) => (
+            <option key={day + i} value={day}>
+              {day}
             </option>
           ))}
         </select>
@@ -251,6 +264,9 @@ const planleggMeso = () => {
           </div>
         </div>
       </div>
+      <button>
+        <h1>Lagre økt</h1>
+      </button>
     </main>
   );
 };
@@ -274,6 +290,8 @@ const Exercise = ({
   removeExercise,
   index,
 }: ExerciseProps) => {
+  const [name, setName] = useState(exercise.name);
+
   const handleSetsChange = (newSets: number) => {
     setMeso((prevMeso: Meso) => {
       const newSessions = prevMeso.sessions.map(
@@ -291,16 +309,15 @@ const Exercise = ({
     });
   };
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameOnBlure = () => {
     setMeso((prevMeso: Meso) => {
-      const newName = e.target.value;
       const newSessions = prevMeso.sessions.map(
         (session: MesoSessionData, sIdx: number) =>
           sIdx === mesoSession
             ? {
                 ...session,
                 exercises: session.exercises.map((ex: Exercise, eIdx: number) =>
-                  eIdx === index ? { ...ex, name: newName } : ex
+                  eIdx === index ? { ...ex, name: name } : ex
                 ),
               }
             : session
@@ -309,14 +326,19 @@ const Exercise = ({
     });
   };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
   return (
     <div className={styles["exercise-wrapper"]}>
       <button onClick={() => removeExercise(index)}> X </button>
 
       <input
         type="text"
-        value={exercise.name}
+        value={name}
         onChange={handleNameChange}
+        onBlur={() => handleNameOnBlure()}
         className={styles["input-h2"]}
       />
 
@@ -340,15 +362,13 @@ const Exercise = ({
   );
 };
 
-const day = (dayIndex: number) => {
-  const days = [
-    "Søndag",
-    "Mandag",
-    "Tirsdag",
-    "Onsdag",
-    "Torsdag",
-    "Fredag",
-    "Lørdag",
-  ];
-  return days[dayIndex];
+const getDay = (dayIndex: number) => {
+  if (days[dayIndex]) return days[dayIndex];
+  return days[0];
+};
+
+const getDayIndex = (day: string) => {
+  const dayIndex = days.indexOf(day);
+  if (dayIndex == -1) return 0 as DayIndex;
+  return dayIndex as DayIndex;
 };

@@ -18,7 +18,7 @@ const Page = async () => {
         <Link href={"/hjem"} className={cc([styles.link, styles.back])}>
           <h2>Tilbake</h2>
         </Link>
-        <Link href={""} className={cc([styles.link, styles.next])}>
+        <Link href={"/ovelse"} className={cc([styles.link, styles.next])}>
           <h2>Start</h2>
         </Link>
       </nav>

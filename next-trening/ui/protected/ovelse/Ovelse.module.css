@@ -1,0 +1,25 @@
+.table-wrapper {
+  background-color: var(--bc-soft);
+  border-radius: var(--gap);
+  width: var(--hundo-gap);
+  padding: var(--gap);
+}
+
+.table {
+}
+
+.table-element {
+  font-size: var(--h2-fz);
+  padding: var(--gap-s);
+  width: 100%;
+}
+
+.add-sett-button {
+  all: unset;
+  font-size: var(--h2-fz);
+  width: var(--hundo-gap);
+  background-color: var(--next);
+  text-align: center;
+  padding: var(--gap);
+  border-radius: var(--gap);
+}
