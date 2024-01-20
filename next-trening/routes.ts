@@ -1,4 +1,4 @@
-export const publicRoutes = ["/"];
+export const publicRoutes = ["/", "/mob-test", "/planlegg-meso"];
 
 export const authRoutes = ["/registrer", "/logg-inn"];
 

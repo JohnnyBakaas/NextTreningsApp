@@ -189,33 +189,31 @@ const planleggMeso = () => {
   return (
     <main>
       <h1>Planlegg Meso</h1>
-      <div className={styles["wrapper"]}>
-        <div className={styles["day-selecter-wrapper"]}>
-          <h2>
-            Økt: {mesoSession + 1}/{meso.sessions.length}
-          </h2>
-          <select
-            value={getDay(meso.sessions[mesoSession].day)}
-            onChange={handleDayChange}
-            className={styles["select"]}
-          >
-            {days.map((day, i) => (
-              <option key={day + i} value={day}>
-                {day}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div>
+        <h2>
+          Økt: {mesoSession + 1}/{meso.sessions.length} -{" "}
+          {getDay(meso.sessions[mesoSession].day)}
+        </h2>
+        <select
+          value={getDay(meso.sessions[mesoSession].day)}
+          onChange={handleDayChange}
+        >
+          {days.map((day, i) => (
+            <option key={day + i} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
         <div className={styles["session-wrapper"]}>
           <div className={styles["session-name-wrapper"]}>
             <input
               type="text"
               onChange={handleNameChange}
               value={meso.sessions[mesoSession].name}
-              className={styles["input-h2"]}
+              className={styles["input-h1"]}
             />
             <button
-              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
+              className={cc([styles["svg-button"], styles["svg-button-h1"]])}
             >
               <ImCross />
             </button>
@@ -242,31 +240,20 @@ const planleggMeso = () => {
             Legg til en ny øvelse
           </button>
 
-          <div className={styles["sesion-nav-wrapper"]}>
+          <div>
             <button
               onClick={() =>
                 setMesoSession((pre) => (pre == 0 ? pre : pre - 1))
               }
             >
-              {mesoSession == 0 ? <AiOutlineStop /> : <FaArrowLeft />}
+              <h2>{mesoSession == 0 ? <AiOutlineStop /> : <FaArrowLeft />}</h2>
             </button>
-
-            <div className={styles["text-button-wrapper"]}>
-              <button
-                onClick={() => addNewSession()}
-                className={styles["session-nav-text"]}
-              >
-                Legg til ny økt
-              </button>
-
-              <button
-                onClick={() => copySession()}
-                className={styles["session-nav-text"]}
-              >
-                Kopier økt
-              </button>
-            </div>
-
+            <button onClick={() => addNewSession()}>
+              <h2>Legg til ny økt</h2>
+            </button>
+            <button onClick={() => copySession()}>
+              <h2>Kopier økt</h2>
+            </button>
             <button
               onClick={() =>
                 setMesoSession((pre) =>
@@ -274,11 +261,13 @@ const planleggMeso = () => {
                 )
               }
             >
-              {mesoSession == meso.sessions.length - 1 ? (
-                <AiOutlineStop />
-              ) : (
-                <FaArrowRight />
-              )}
+              <h2>
+                {mesoSession == meso.sessions.length - 1 ? (
+                  <AiOutlineStop />
+                ) : (
+                  <FaArrowRight />
+                )}
+              </h2>
             </button>
           </div>
         </div>
@@ -367,7 +356,7 @@ const Exercise = ({
         value={name}
         onChange={handleNameChange}
         onBlur={() => handleNameOnBlure()}
-        className={styles["input-h3"]}
+        className={styles["input-h2"]}
       />
 
       <div className={styles["arrow-button-wrapper"]}>
