@@ -236,7 +236,7 @@ const planleggMeso = () => {
           </div>
 
           <button
-            className={styles["add-exercise-button"]}
+            className={cc([styles["add-exercise-button"]])}
             onClick={() => addNewExercise()}
           >
             Legg til en ny øvelse
@@ -247,21 +247,32 @@ const planleggMeso = () => {
               onClick={() =>
                 setMesoSession((pre) => (pre == 0 ? pre : pre - 1))
               }
+              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
             >
-              {mesoSession == 0 ? <AiOutlineStop /> : <FaArrowLeft />}
+              {mesoSession == 0 ? (
+                <AiOutlineStop className={styles.red} />
+              ) : (
+                <FaArrowLeft />
+              )}
             </button>
 
             <div className={styles["text-button-wrapper"]}>
               <button
                 onClick={() => addNewSession()}
-                className={styles["session-nav-text"]}
+                className={cc([
+                  styles["session-nav-text"],
+                  styles["sesion-nav-wrapper-button"],
+                ])}
               >
                 Legg til ny økt
               </button>
 
               <button
                 onClick={() => copySession()}
-                className={styles["session-nav-text"]}
+                className={cc([
+                  styles["session-nav-text"],
+                  styles["sesion-nav-wrapper-button"],
+                ])}
               >
                 Kopier økt
               </button>
@@ -273,9 +284,10 @@ const planleggMeso = () => {
                   pre == meso.sessions.length - 1 ? pre : pre + 1
                 )
               }
+              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
             >
               {mesoSession == meso.sessions.length - 1 ? (
-                <AiOutlineStop />
+                <AiOutlineStop className={styles.red} />
               ) : (
                 <FaArrowRight />
               )}
@@ -358,8 +370,7 @@ const Exercise = ({
         onClick={() => removeExercise(index)}
         className={styles["svg-button"]}
       >
-        {" "}
-        X{" "}
+        <ImCross />
       </button>
 
       <input
@@ -376,14 +387,22 @@ const Exercise = ({
           onClick={() => handleSetsChange(exercise.sets - 1)}
           disabled={exercise.sets <= 1}
         >
-          {exercise.sets <= 1 ? <AiOutlineStop /> : <FaArrowLeft />}
+          {exercise.sets <= 1 ? (
+            <AiOutlineStop className={styles.red} />
+          ) : (
+            <FaArrowLeft />
+          )}
         </button>
         <h2>{exercise.sets}</h2>
         <button
           className={styles["svg-button"]}
           onClick={() => handleSetsChange(exercise.sets + 1)}
         >
-          {exercise.sets >= 10 ? <AiOutlineStop /> : <FaArrowRight />}
+          {exercise.sets >= 10 ? (
+            <AiOutlineStop className={styles.red} />
+          ) : (
+            <FaArrowRight />
+          )}
         </button>
       </div>
     </div>

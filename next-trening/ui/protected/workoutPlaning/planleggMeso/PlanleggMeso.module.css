@@ -125,7 +125,7 @@
   gap: var(--gap-s);
 }
 
-.sesion-nav-wrapper button {
+.sesion-nav-wrapper-button {
   all: unset;
   padding: var(--gap-s);
   border-radius: var(--gap-s);
@@ -146,5 +146,10 @@
 
 .session-nav-text {
   width: var(--hundo-gap-s);
+  display: inline-block;
   text-align: center;
+}
+
+.red {
+  color: var(--red);
 }
