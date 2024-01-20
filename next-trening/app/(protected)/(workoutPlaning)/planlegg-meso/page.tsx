@@ -95,7 +95,7 @@ const planleggMeso = () => {
       const newExercises = [...currentSession.exercises];
 
       const newExercise: Exercise = {
-        name: "New Exercise",
+        name: "Ny øvelse",
         sets: 2,
         completed: false,
       };
