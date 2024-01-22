@@ -1,3 +1,9 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -90,6 +96,10 @@
   display: flex;
 }
 
+.svg-button:focus {
+  color: var(--next);
+}
+
 .add-exercise-button {
   all: unset;
   width: var(--hundo-gap);
@@ -152,4 +162,24 @@
 
 .red {
   color: var(--red);
+}
+
+.add-exercise-button:focus,
+.session-nav-text:focus {
+  color: var(--bc);
+}
+
+.x-button:focus {
+  color: var(--red);
+}
+
+.save-button {
+  all: unset;
+  padding: var(--gap);
+  border-radius: var(--gap);
+  background-color: var(--next);
+  color: white;
+  font-size: var(--h2-fz);
+  width: var(--hundo-gap);
+  text-align: center;
 }

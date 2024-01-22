@@ -1,40 +1,20 @@
 "use client";
 
 import styles from "@/ui/protected/workoutPlaning/planleggMeso/PlanleggMeso.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { AiOutlineStop } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
-// @ts-ignore
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { cc } from "@/utils/classes";
-
-export type Meso = {
-  name: string;
-  sessions: MesoSessionData[];
-};
-
-export type MesoSessionData = {
-  name: string; // Push, Pull, Legs, Full Body, Upper, Lower, Custom
-  exercises: Exercise[];
-  day: DayIndex;
-  mesoDayNumber: number;
-  completed: boolean;
-};
-
-type DayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-export type Exercise = {
-  name: string;
-  sets: number;
-  completed: boolean;
-};
-
-export type Set = {
-  reps: number;
-  weight: number;
-  rir: number;
-  notes: string;
-};
+import { saveMesoPlan } from "@/actions/saveMesoPlan";
+import {
+  Meso,
+  MesoSessionData,
+  DayIndex,
+  Exercise,
+  Set,
+} from "@/contracts/meso";
+import Spinner from "@/ui/componets/spinner/Spinner";
 
 const data: Meso = {
   name: "Meso 1",
@@ -86,6 +66,7 @@ const days = [
 const planleggMeso = () => {
   const [meso, setMeso] = useState<Meso>(data);
   const [mesoSession, setMesoSession] = useState(0);
+  const [isPending, startTransition] = useTransition();
 
   const addNewExercise = () => {
     setMeso((prevMeso) => {
@@ -177,6 +158,38 @@ const planleggMeso = () => {
     });
   };
 
+  const removeSession = (index: number) => {
+    setMeso((prevMeso) => {
+      if (meso.sessions.length === 1) {
+        const newMeso = { ...prevMeso };
+        const newExercise: Exercise = {
+          name: "Ny øvelse",
+          sets: 2,
+          completed: false,
+        };
+        const newSession: MesoSessionData = {
+          name: "Ny økt",
+          exercises: [newExercise],
+          day: 0,
+          mesoDayNumber: 1,
+          completed: false,
+        };
+        const newSessions = [newSession];
+
+        setMesoSession(() => 0);
+        return { ...newMeso, sessions: newSessions };
+      } else {
+        const newMeso = { ...prevMeso };
+        const newSessions = newMeso.sessions.filter((_, idx) => idx !== index);
+
+        setMesoSession((pre) =>
+          pre >= newSessions.length ? newSessions.length - 1 : pre
+        );
+        return { ...newMeso, sessions: newSessions };
+      }
+    });
+  };
+
   const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const day = e.target.value;
     setMeso((pre) => {
@@ -186,9 +199,18 @@ const planleggMeso = () => {
     });
   };
 
+  const upLoadMesoPlan = () => {
+    console.log(meso);
+    startTransition(() => {
+      saveMesoPlan(meso).then((data) => {
+        console.log(data);
+      });
+    });
+  };
+
   return (
-    <main>
-      <h1>Planlegg Meso</h1>
+    <main className={styles.main}>
+      <h1>Planlegg</h1>
       <div className={styles["wrapper"]}>
         <div className={styles["day-selecter-wrapper"]}>
           <h2>
@@ -215,7 +237,12 @@ const planleggMeso = () => {
               className={styles["input-h2"]}
             />
             <button
-              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
+              className={cc([
+                styles["svg-button"],
+                styles["svg-button-h2"],
+                styles["x-button"],
+              ])}
+              onClick={() => removeSession(mesoSession)}
             >
               <ImCross />
             </button>
@@ -223,7 +250,7 @@ const planleggMeso = () => {
 
           <div className={styles["exercises-constainer"]}>
             {meso.sessions[mesoSession].exercises.map((exercise, index) => (
-              <Exercise
+              <ExerciseComponent
                 key={`${exercise.name}-${index}`}
                 removeExercise={removeExercise}
                 mesoSession={mesoSession}
@@ -248,6 +275,7 @@ const planleggMeso = () => {
                 setMesoSession((pre) => (pre == 0 ? pre : pre - 1))
               }
               className={cc([styles["svg-button"], styles["svg-button-h2"]])}
+              disabled={mesoSession == 0}
             >
               {mesoSession == 0 ? (
                 <AiOutlineStop className={styles.red} />
@@ -284,6 +312,7 @@ const planleggMeso = () => {
                   pre == meso.sessions.length - 1 ? pre : pre + 1
                 )
               }
+              disabled={mesoSession == meso.sessions.length - 1}
               className={cc([styles["svg-button"], styles["svg-button-h2"]])}
             >
               {mesoSession == meso.sessions.length - 1 ? (
@@ -295,8 +324,12 @@ const planleggMeso = () => {
           </div>
         </div>
       </div>
-      <button>
-        <h1>Lagre økt</h1>
+      <button
+        className={styles["save-button"]}
+        onClick={() => upLoadMesoPlan()}
+        disabled={isPending}
+      >
+        {isPending ? <Spinner /> : "Lagre økt"}
       </button>
     </main>
   );
@@ -304,7 +337,7 @@ const planleggMeso = () => {
 
 export default planleggMeso;
 
-type ExerciseProps = {
+type ExerciseComponentProps = {
   removeExercise: (index: number) => void;
   exercise: Exercise;
   setMeso: (pre: Meso) => void;
@@ -313,15 +346,16 @@ type ExerciseProps = {
   index: number;
 };
 
-const Exercise = ({
+const ExerciseComponent = ({
   exercise,
   setMeso,
   meso,
   mesoSession,
   removeExercise,
   index,
-}: ExerciseProps) => {
+}: ExerciseComponentProps) => {
   const [name, setName] = useState(exercise.name);
+  const maxSets = 10;
 
   const handleSetsChange = (newSets: number) => {
     if (newSets < 1 || newSets > 10) return;
@@ -368,7 +402,7 @@ const Exercise = ({
     <div className={styles["exercise-wrapper"]}>
       <button
         onClick={() => removeExercise(index)}
-        className={styles["svg-button"]}
+        className={cc([styles["svg-button"], styles["x-button"]])}
       >
         <ImCross />
       </button>
@@ -397,8 +431,9 @@ const Exercise = ({
         <button
           className={styles["svg-button"]}
           onClick={() => handleSetsChange(exercise.sets + 1)}
+          disabled={exercise.sets >= maxSets}
         >
-          {exercise.sets >= 10 ? (
+          {exercise.sets >= maxSets ? (
             <AiOutlineStop className={styles.red} />
           ) : (
             <FaArrowRight />
