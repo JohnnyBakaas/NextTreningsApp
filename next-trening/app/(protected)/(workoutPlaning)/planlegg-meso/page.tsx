@@ -329,7 +329,7 @@ const planleggMeso = () => {
         onClick={() => upLoadMesoPlan()}
         disabled={isPending}
       >
-        {isPending ? <Spinner /> : "Lagre økt"}
+        {isPending ? <Spinner /> : "Lagre plan"}
       </button>
     </main>
   );
