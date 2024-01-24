@@ -23,6 +23,9 @@ model User {
   password      String?
   role          UserRole  @default(USER)
   accounts      Account[]
+
+  mesos        Meso[]
+  curentMesoId String?
 }
 
 model Account {
@@ -43,3 +46,56 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
+
+model Meso {
+  id String @id @default(cuid())
+
+  name       String
+  sessions   Session[]
+  startDate  DateTime?
+  endDate    DateTime?
+  weekLength Int
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Session {
+  id String @id @default(cuid())
+
+  name     String
+  exercise Exercise[]
+  dayIndex Int
+
+  meso   Meso?   @relation(fields: [mesoId], references: [id])
+  mesoId String?
+}
+
+model Exercise {
+  id String @id @default(cuid())
+
+  name String
+  sets Set[]
+
+  Session   Session? @relation(fields: [sessionId], references: [id])
+  sessionId String?
+}
+
+model Set {
+  id String @id @default(cuid())
+
+  waight    Int
+  reps      Int
+  rir       Int
+  completed Boolean
+
+  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+  exerciseId String?
+}
+
+// q: how do i update my db?
+// a: npx prisma migrate dev --name init
+// q: should i use somthing else then --name?
+// a: yes, use --name to name your migration
+// q: what dose --name do?
+// a: it names your migration

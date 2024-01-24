@@ -7,7 +7,6 @@ export type MesoSessionData = {
   name: string; // Push, Pull, Legs, Full Body, Upper, Lower, Custom
   exercises: Exercise[];
   day: DayIndex;
-  mesoDayNumber: number;
   completed: boolean;
 };
 

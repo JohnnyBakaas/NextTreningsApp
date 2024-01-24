@@ -1,4 +1,5 @@
 "use client";
+// endre dette til en server komponent og legg hele resten av filen i en client komponent
 
 import styles from "@/ui/protected/workoutPlaning/planleggMeso/PlanleggMeso.module.css";
 import React, { useEffect, useState, useTransition } from "react";
@@ -15,6 +16,7 @@ import {
   Set,
 } from "@/contracts/meso";
 import Spinner from "@/ui/componets/spinner/Spinner";
+import { auth } from "@/auth";
 
 const data: Meso = {
   name: "Meso 1",
@@ -34,7 +36,6 @@ const data: Meso = {
         },
       ],
       day: 0,
-      mesoDayNumber: 1,
       completed: false,
     },
     {
@@ -47,7 +48,6 @@ const data: Meso = {
         },
       ],
       day: 1,
-      mesoDayNumber: 1,
       completed: false,
     },
   ],
@@ -66,7 +66,18 @@ const days = [
 const planleggMeso = () => {
   const [meso, setMeso] = useState<Meso>(data);
   const [mesoSession, setMesoSession] = useState(0);
+  const [sessin, setSession] = useState<any>(null);
+
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const getSession = async () => {
+      const sessin = await auth();
+      console.log(sessin);
+      setSession(sessin);
+    };
+    getSession();
+  }, []);
 
   const addNewExercise = () => {
     setMeso((prevMeso) => {
@@ -103,7 +114,6 @@ const planleggMeso = () => {
         },
       ],
       day: 0,
-      mesoDayNumber: 1,
       completed: false,
     };
 
@@ -171,7 +181,6 @@ const planleggMeso = () => {
           name: "Ny økt",
           exercises: [newExercise],
           day: 0,
-          mesoDayNumber: 1,
           completed: false,
         };
         const newSessions = [newSession];
@@ -202,7 +211,8 @@ const planleggMeso = () => {
   const upLoadMesoPlan = () => {
     console.log(meso);
     startTransition(() => {
-      saveMesoPlan(meso).then((data) => {
+      if (!sessin) return;
+      saveMesoPlan(sessin?.user.id, meso).then((data) => {
         console.log(data);
       });
     });
