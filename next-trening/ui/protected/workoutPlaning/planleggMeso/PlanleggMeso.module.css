@@ -4,12 +4,6 @@
   gap: var(--gap);
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
 .day-selecter-wrapper {
   display: flex;
   justify-content: space-between;
@@ -47,6 +41,7 @@
   color: var(--bc);
 }
 
+.input-h2:hover,
 .input-h2:focus {
   border-color: var(--next);
 }
@@ -63,6 +58,7 @@
   color: var(--bc);
 }
 
+.input-h3:hover,
 .input-h3:focus {
   border-color: var(--next);
 }
@@ -96,6 +92,7 @@
   display: flex;
 }
 
+.svg-button:hover,
 .svg-button:focus {
   color: var(--next);
 }
@@ -164,11 +161,14 @@
   color: var(--red);
 }
 
+.add-exercise-button:hover,
+.session-nav-text:hover,
 .add-exercise-button:focus,
 .session-nav-text:focus {
   color: var(--bc);
 }
 
+.x-button:hover,
 .x-button:focus {
   color: var(--red);
 }
@@ -182,4 +182,13 @@
   font-size: var(--h2-fz);
   width: var(--hundo-gap);
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--h2-fz);
+}
+
+.save-button:hover,
+.save-button:focus {
+  color: var(--bc);
 }

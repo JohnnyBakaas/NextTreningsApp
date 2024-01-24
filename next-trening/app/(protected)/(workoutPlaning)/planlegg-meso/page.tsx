@@ -211,117 +211,113 @@ const planleggMeso = () => {
   return (
     <main className={styles.main}>
       <h1>Planlegg</h1>
-      <div className={styles["wrapper"]}>
-        <div className={styles["day-selecter-wrapper"]}>
-          <h2>
-            Økt: {mesoSession + 1}/{meso.sessions.length}
-          </h2>
-          <select
-            value={getDay(meso.sessions[mesoSession].day)}
-            onChange={handleDayChange}
-            className={styles["select"]}
+      <div className={styles["day-selecter-wrapper"]}>
+        <h2>
+          Økt: {mesoSession + 1}/{meso.sessions.length}
+        </h2>
+        <select
+          value={getDay(meso.sessions[mesoSession].day)}
+          onChange={handleDayChange}
+          className={styles["select"]}
+        >
+          {days.map((day, i) => (
+            <option key={day + i} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className={styles["session-wrapper"]}>
+        <div className={styles["session-name-wrapper"]}>
+          <input
+            type="text"
+            onChange={handleNameChange}
+            value={meso.sessions[mesoSession].name}
+            className={styles["input-h2"]}
+          />
+          <button
+            className={cc([
+              styles["svg-button"],
+              styles["svg-button-h2"],
+              styles["x-button"],
+            ])}
+            onClick={() => removeSession(mesoSession)}
           >
-            {days.map((day, i) => (
-              <option key={day + i} value={day}>
-                {day}
-              </option>
-            ))}
-          </select>
+            <ImCross />
+          </button>
         </div>
-        <div className={styles["session-wrapper"]}>
-          <div className={styles["session-name-wrapper"]}>
-            <input
-              type="text"
-              onChange={handleNameChange}
-              value={meso.sessions[mesoSession].name}
-              className={styles["input-h2"]}
-            />
-            <button
-              className={cc([
-                styles["svg-button"],
-                styles["svg-button-h2"],
-                styles["x-button"],
-              ])}
-              onClick={() => removeSession(mesoSession)}
-            >
-              <ImCross />
-            </button>
-          </div>
 
-          <div className={styles["exercises-constainer"]}>
-            {meso.sessions[mesoSession].exercises.map((exercise, index) => (
-              <ExerciseComponent
-                key={`${exercise.name}-${index}`}
-                removeExercise={removeExercise}
-                mesoSession={mesoSession}
-                exercise={exercise}
-                setMeso={setMeso}
-                meso={meso}
-                index={index}
-              />
-            ))}
+        <div className={styles["exercises-constainer"]}>
+          {meso.sessions[mesoSession].exercises.map((exercise, index) => (
+            <ExerciseComponent
+              key={`${exercise.name}-${index}`}
+              removeExercise={removeExercise}
+              mesoSession={mesoSession}
+              exercise={exercise}
+              setMeso={setMeso}
+              meso={meso}
+              index={index}
+            />
+          ))}
+        </div>
+
+        <button
+          className={cc([styles["add-exercise-button"]])}
+          onClick={() => addNewExercise()}
+        >
+          Legg til en ny øvelse
+        </button>
+
+        <div className={styles["sesion-nav-wrapper"]}>
+          <button
+            onClick={() => setMesoSession((pre) => (pre == 0 ? pre : pre - 1))}
+            className={cc([styles["svg-button"], styles["svg-button-h2"]])}
+            disabled={mesoSession == 0}
+          >
+            {mesoSession == 0 ? (
+              <AiOutlineStop className={styles.red} />
+            ) : (
+              <FaArrowLeft />
+            )}
+          </button>
+
+          <div className={styles["text-button-wrapper"]}>
+            <button
+              onClick={() => addNewSession()}
+              className={cc([
+                styles["session-nav-text"],
+                styles["sesion-nav-wrapper-button"],
+              ])}
+            >
+              Legg til ny økt
+            </button>
+
+            <button
+              onClick={() => copySession()}
+              className={cc([
+                styles["session-nav-text"],
+                styles["sesion-nav-wrapper-button"],
+              ])}
+            >
+              Kopier økt
+            </button>
           </div>
 
           <button
-            className={cc([styles["add-exercise-button"]])}
-            onClick={() => addNewExercise()}
+            onClick={() =>
+              setMesoSession((pre) =>
+                pre == meso.sessions.length - 1 ? pre : pre + 1
+              )
+            }
+            disabled={mesoSession == meso.sessions.length - 1}
+            className={cc([styles["svg-button"], styles["svg-button-h2"]])}
           >
-            Legg til en ny øvelse
+            {mesoSession == meso.sessions.length - 1 ? (
+              <AiOutlineStop className={styles.red} />
+            ) : (
+              <FaArrowRight />
+            )}
           </button>
-
-          <div className={styles["sesion-nav-wrapper"]}>
-            <button
-              onClick={() =>
-                setMesoSession((pre) => (pre == 0 ? pre : pre - 1))
-              }
-              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
-              disabled={mesoSession == 0}
-            >
-              {mesoSession == 0 ? (
-                <AiOutlineStop className={styles.red} />
-              ) : (
-                <FaArrowLeft />
-              )}
-            </button>
-
-            <div className={styles["text-button-wrapper"]}>
-              <button
-                onClick={() => addNewSession()}
-                className={cc([
-                  styles["session-nav-text"],
-                  styles["sesion-nav-wrapper-button"],
-                ])}
-              >
-                Legg til ny økt
-              </button>
-
-              <button
-                onClick={() => copySession()}
-                className={cc([
-                  styles["session-nav-text"],
-                  styles["sesion-nav-wrapper-button"],
-                ])}
-              >
-                Kopier økt
-              </button>
-            </div>
-
-            <button
-              onClick={() =>
-                setMesoSession((pre) =>
-                  pre == meso.sessions.length - 1 ? pre : pre + 1
-                )
-              }
-              disabled={mesoSession == meso.sessions.length - 1}
-              className={cc([styles["svg-button"], styles["svg-button-h2"]])}
-            >
-              {mesoSession == meso.sessions.length - 1 ? (
-                <AiOutlineStop className={styles.red} />
-              ) : (
-                <FaArrowRight />
-              )}
-            </button>
-          </div>
         </div>
       </div>
       <button
