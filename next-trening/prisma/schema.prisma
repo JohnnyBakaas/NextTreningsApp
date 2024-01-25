@@ -51,7 +51,7 @@ model Meso {
   id String @id @default(cuid())
 
   name       String
-  sessions   Session[]
+  sessions   WorkoutSession[]
   startDate  DateTime?
   endDate    DateTime?
   weekLength Int
@@ -60,7 +60,7 @@ model Meso {
   userId String?
 }
 
-model Session {
+model WorkoutSession {
   id String @id @default(cuid())
 
   name     String
@@ -69,6 +69,8 @@ model Session {
 
   meso   Meso?   @relation(fields: [mesoId], references: [id])
   mesoId String?
+
+  @@map("Session")
 }
 
 model Exercise {
@@ -77,7 +79,7 @@ model Exercise {
   name String
   sets Set[]
 
-  Session   Session? @relation(fields: [sessionId], references: [id])
+  Session   WorkoutSession? @relation(fields: [sessionId], references: [id])
   sessionId String?
 }
 

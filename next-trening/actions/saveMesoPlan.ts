@@ -4,6 +4,7 @@ import { Meso, MesoSessionData } from "@/contracts/meso";
 import { db } from "@/db/db";
 
 export const saveMesoPlan = async (userId: string, mesoData: Meso) => {
+  /*
 
   if (!mesoData || !mesoData.sessions) return;
 
@@ -24,7 +25,7 @@ export const saveMesoPlan = async (userId: string, mesoData: Meso) => {
         createMany: {
           data: mesoData.sessions.map((session: MesoSessionData) => ({
             name: session.name,
-            day: session.day,
+            dayIndex: session.day,
             exercises: {
               createMany: {
                 data: session.exercises.map((exercise) => ({
@@ -49,4 +50,6 @@ export const saveMesoPlan = async (userId: string, mesoData: Meso) => {
   return {
     success: true,
   };
+
+  */
 };
