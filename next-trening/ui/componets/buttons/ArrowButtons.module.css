@@ -1,0 +1,31 @@
+.button {
+  all: unset;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--h2-fz);
+  height: var(--h2-fz);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.button:hover {
+  background-color: var(--next);
+}
+
+.button:focus {
+  border-color: var(--bc);
+}
+
+.large {
+  width: var(--h1-fz);
+  height: var(--h1-fz);
+}
+
+.large svg {
+  width: var(--h2-fz);
+  height: var(--h2-fz);
+}

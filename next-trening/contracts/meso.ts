@@ -1,5 +1,6 @@
 export type Meso = {
   name: string;
+  weekLength: number;
   sessions: MesoSessionData[];
 };
 

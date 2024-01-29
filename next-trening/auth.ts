@@ -16,14 +16,9 @@ export const {
     async signIn({ user, account, profile, email, credentials }) {
       console.log("signIn", { user, account, profile, email, credentials });
 
+      console.log("user", user);
       if (user.id) {
         const existingUser = await getUserById(user.id);
-
-        /*
-        if (!existingUser || !existingUser.emailVerified) {
-          return false;
-        }
-        */
 
         if (account?.provider === "github" || account?.provider === "google") {
           if (user.id) {

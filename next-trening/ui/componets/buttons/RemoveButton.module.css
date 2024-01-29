@@ -1,0 +1,42 @@
+.button {
+  all: unset;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+
+  width: var(--h2-fz);
+  height: var(--h2-fz);
+  border-radius: 50%;
+}
+
+.button svg {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.button:hover {
+  background-color: var(--red);
+  color: var(--bc);
+}
+
+.button:focus {
+  background-color: var(--red);
+  color: var(--bc);
+}
+
+.button:disabled {
+  opacity: 0.9;
+}
+
+.large {
+  width: var(--h1-fz);
+  height: var(--h1-fz);
+}
+
+.large svg {
+  width: var(--h2-fz);
+  height: var(--h2-fz);
+}

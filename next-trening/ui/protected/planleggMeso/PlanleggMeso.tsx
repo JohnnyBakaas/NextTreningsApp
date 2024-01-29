@@ -1,5 +1,4 @@
 "use client";
-// endre dette til en server komponent og legg hele resten av filen i en client komponent
 
 import styles from "@/ui/protected/workoutPlaning/planleggMeso/PlanleggMeso.module.css";
 import React, { useEffect, useState, useTransition } from "react";
@@ -8,54 +7,55 @@ import { ImCross } from "react-icons/im";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { cc } from "@/utils/classes";
 import { saveMesoPlan } from "@/actions/saveMesoPlan";
-import {
-  Meso,
-  MesoSessionData,
-  DayIndex,
-  Exercise,
-  Set,
-} from "@/contracts/meso";
 import Spinner from "@/ui/componets/spinner/Spinner";
-import { auth } from "@/auth";
-import SessinGetter, {
-  SessinGetterProps,
-} from "@/ui/componets/sessinGetter/SessinGetter";
 import { Session } from "next-auth/types";
 
-const data: Meso = {
+import { Meso, WorkoutSession, Exercise, Set } from "@prisma/client";
+
+const meso: Meso = {
+  id: "N/A",
+
   name: "Meso 1",
-  sessions: [
-    {
-      name: "Push",
-      exercises: [
-        {
-          name: "Bench Press",
-          sets: 2,
-          completed: false,
-        },
-        {
-          name: "Incline Bench Press",
-          sets: 2,
-          completed: false,
-        },
-      ],
-      day: 0,
-      completed: false,
-    },
-    {
-      name: "Pull",
-      exercises: [
-        {
-          name: "Lat pulldown",
-          sets: 2,
-          completed: false,
-        },
-      ],
-      day: 1,
-      completed: false,
-    },
-  ],
+  weekLength: 4,
+  startDate: new Date(),
+  endDate: new Date(),
+
+  userId: "N/A",
 };
+
+const sessions: WorkoutSession[] = [
+  {
+    id: "N/A",
+
+    name: "Push",
+    dayIndex: 0,
+
+    mesoId: "N/A",
+  },
+];
+
+const exercises: Exercise[] = [
+  {
+    id: "N/A",
+
+    name: "Bench Press",
+
+    sessionId: "N/A",
+  },
+];
+
+const sets: Set[] = [
+  {
+    id: "N/A",
+
+    weight: 100,
+    reps: 10,
+    rir: 3,
+    completed: false,
+
+    exerciseId: "N/A",
+  },
+];
 
 const days = [
   "Mandag",
@@ -71,7 +71,7 @@ type PlanleggMesoProps = {
   session: Session | null;
 };
 
-const PlanleggMeso = ({ sessin: session }: PlanleggMesoProps) => {
+const PlanleggMeso = ({ session }: PlanleggMesoProps) => {
   const [meso, setMeso] = useState<Meso>(data);
   const [mesoSession, setMesoSession] = useState(0);
 
@@ -197,6 +197,15 @@ const PlanleggMeso = ({ sessin: session }: PlanleggMesoProps) => {
     });
   };
 
+  const handleMesoLength = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const length = e.target.value;
+    setMeso((pre) => {
+      const newMeso = { ...pre };
+      newMeso.weekLength = parseInt(length);
+      return newMeso;
+    });
+  };
+
   const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const day = e.target.value;
     setMeso((pre) => {
@@ -219,6 +228,22 @@ const PlanleggMeso = ({ sessin: session }: PlanleggMesoProps) => {
   return (
     <main className={styles.main}>
       <h1>Planlegg</h1>
+
+      <div className={styles["day-selecter-wrapper"]}>
+        <h2>Uker:</h2>
+        <select
+          className={styles["select"]}
+          value={meso.weekLength}
+          onChange={handleMesoLength}
+        >
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="6">7</option>
+          <option value="6">8</option>
+        </select>
+      </div>
       <div className={styles["day-selecter-wrapper"]}>
         <h2>
           Økt: {mesoSession + 1}/{meso.sessions.length}
