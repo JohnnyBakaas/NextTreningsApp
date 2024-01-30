@@ -1,0 +1,28 @@
+.h1 {
+  font-size: var(--h1-fz);
+  width: 100%;
+  padding: var(--gap);
+  border-radius: var(--gap);
+  border-width: 0;
+}
+
+.h2 {
+  font-size: var(--h2-fz);
+  width: 100%;
+  padding: var(--gap-s);
+  border-radius: var(--gap-s);
+  border-width: 0;
+}
+
+.h3 {
+  font-size: var(--h3-fz);
+  width: 100%;
+  padding: var(--gap-s);
+  border-radius: var(--gap-s);
+  border-width: 0;
+}
+
+.button {
+  background-color: var(--next);
+  color: var(--text);
+}

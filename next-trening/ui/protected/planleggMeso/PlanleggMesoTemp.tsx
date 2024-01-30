@@ -25,6 +25,8 @@ import { Exercise, Meso, WorkoutSession } from "@prisma/client";
 import { useEffect, useState } from "react";
 import styles from "./PlanleggMeso.module.css";
 import { days, getDay, getDayIndex } from "@/utils/days";
+import Spinner from "@/ui/componets/spinner/Spinner";
+import BigButton from "@/ui/componets/buttons/BigButton";
 
 type PlanleggMesoTempProps = {
   meso: Meso;
@@ -100,11 +102,12 @@ const PlanleggMesoTemp = ({ meso }: PlanleggMesoTempProps) => {
 
       <div className={styles["session-selector"]}>
         <ArrowButtonLeft size="large" />
-        <h1>Økt 1 av 3</h1>
+        <h2>Økt: 1 av 3</h2>
         <ArrowButtonRight size="large" />
       </div>
 
       <button>Legg til ny økt</button>
+      <BigButton size="h1">Legg til ny økt</BigButton>
 
       {currentSession ? <SessionCard session={currentSession} /> : null}
     </main>
@@ -222,7 +225,12 @@ const SessionCard = ({ session }: SessionCardProps) => {
 
   return (
     <div className={styles["session-card"]}>
-      <h2>{/*JSON.stringify(session)*/} </h2>
+      <BigButton size="h1">Legg til ny økt</BigButton>
+      <BigButton size="h2">Legg til ny økt</BigButton>
+      <BigButton size="h3">Legg til ny økt</BigButton>
+
+      {/*<h2> JSON.stringify(session) </h2>*/}
+
       <input
         type="text"
         className={styles["session-name"]}
@@ -262,7 +270,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
           <button onClick={() => addNewExersise()}>Legg til ny øvelse</button>
         </div>
       ) : (
-        <span>loading</span>
+        <Spinner />
       )}
     </div>
   );
@@ -283,7 +291,7 @@ const ExerciseCard = ({
   deleteExercise,
   changeNameOfExercise,
 }: ExerciseCardProps) => {
-  const [name, setName] = useState(exercise.name);
+  const [name, setName] = useState(`${exercise.name}`);
   const [sets, setSets] = useState(3);
   const [disableDelete, setDisableDelete] = useState(false);
 
@@ -346,18 +354,4 @@ const ExerciseCard = ({
       </div>
     </>
   );
-};
-
-const stringToColor = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += ("00" + value.toString(16)).substr(-2);
-  }
-  return color;
 };

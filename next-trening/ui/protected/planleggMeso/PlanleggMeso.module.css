@@ -44,12 +44,11 @@
   display: flex;
 
   gap: var(--gap-s);
-  width: 100%;
-  padding: var(--gap) 0;
+  width: calc(var(--hundo-gap-s) - 4px);
+  padding: var(--gap-s);
 
-  background-color: var(--bc-soft);
-  border-bottom: var(--bc) 2px solid;
-  border-top: var(--bc) 2px solid;
+  border: var(--text) 2px solid;
+  border-radius: var(--gap-s);
 }
 
 .input-wrapper {
